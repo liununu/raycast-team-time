@@ -13,13 +13,25 @@ interface IMenuBarProps {
   };
 }
 
-export default ({ times = [], action }: IMenuBarProps) => {
-  const items = times.map(t => <MenuBarExtra.Item key={t.code} title={`${t.emoji} ${t.label}: ${t.value}`} />);
+export default () => {
+  const nowTime = new Date().toLocaleString(undefined, { timeStyle: "short" });
+  const time = {
+    emoji: "🇨🇳",
+    code: "CN",
+    label: "China",
+    value: nowTime
+  };
+  const setting = {
+    name: "Setting", do: () => {
+      console.log("should open setting page");
+    }
+  };
+  const items = [time].map(t => <MenuBarExtra.Item key={t.code} title={`${t.emoji} ${t.label}: ${t.value}`} />);
 
   return (
     <MenuBarExtra icon="../assets/icon.png" tooltip="Team Time">
       {items}
-      {action ? <MenuBarExtra.Item title={action.name} onAction={action.do} /> : null}
+      {setting ? <MenuBarExtra.Item title={setting.name} onAction={setting.do} /> : null}
     </MenuBarExtra>
   );
 }
