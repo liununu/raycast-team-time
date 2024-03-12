@@ -4,7 +4,7 @@
   "title": "Team Time",
   "description": "Quick overview of the team's timezones",
   "icon": "icon.png",
-  "author": "thomas",
+  "author": "liununu",
   "categories": [
     "Productivity"
   ],
@@ -13,8 +13,8 @@
     {
       "name": "index",
       "title": "Team Time",
-      "description": "Shows the team's timezones as subtitle",
-      "mode": "no-view",
+      "description": "Shows the team's timezones",
+      "mode": "menu-bar",
       "interval": "1m"
     }
   ],
