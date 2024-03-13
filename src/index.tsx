@@ -16,8 +16,10 @@ export default () => {
   const [times, setTimes] = useState<Time[]>([defaultTime]);
 
   useEffect(() => {
-    LocalStorage.allItems<Time[]>()
-      .then(() => {
+    LocalStorage.allItems()
+      .then((items) => {
+        const reduce = Object.entries(items).reduce((pre, cur) => pre.concat({ code: cur[0], value: cur[1] }), times);
+        setTimes(reduce);
       })
       .catch(() => setTimes([]));
   }, []);
