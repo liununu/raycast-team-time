@@ -1,16 +1,30 @@
-import { Action, ActionPanel, Icon, List } from "@raycast/api";
+import { Action, ActionPanel, Icon, List, LocalStorage } from "@raycast/api";
+import { useEffect, useState } from "react";
 
 export default () => {
-  const nowTime = new Date().toLocaleString(undefined, { timeStyle: "short" });
-  const time = {
-    emoji: "🇨🇳",
-    code: "CN",
-    label: "China",
+  const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const nowTime = new Date().toLocaleString(undefined, {
+    timeStyle: "short",
+    timeZone: currentTimeZone,
+    hour12: false
+  });
+  const defaultTime = {
+    code: currentTimeZone,
     value: nowTime
   };
-  const items = [time].map(t => <List.Item
+
+  const [times, setTimes] = useState<Time[]>([defaultTime]);
+
+  useEffect(() => {
+    LocalStorage.allItems<Time[]>()
+      .then(() => {
+      })
+      .catch(() => setTimes([]));
+  }, []);
+
+  const items = times.map(t => <List.Item
     key={t.code}
-    title={`${t.emoji} ${t.label}: ${t.value}`}
+    title={`${t.code} <-> ${t.value}`}
     actions={
       <ActionPanel title="Management">
         <Action icon={Icon.Heart} title="Mark as Primary" onAction={() => console.log("primary")} />
