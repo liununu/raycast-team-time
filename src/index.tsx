@@ -24,16 +24,19 @@ export default () => {
       .catch(() => setTimes([]));
   }, []);
 
-  const items = times.map(t => <List.Item
-    key={t.code}
-    title={`${t.code} <-> ${t.value}`}
-    actions={
-      <ActionPanel title="Management">
-        <Action icon={Icon.Heart} title="Mark as Primary" onAction={() => console.log("primary")} />
-        <Action icon={Icon.Trash} title="Remove" onAction={() => console.log("remove")} />
-      </ActionPanel>
-    }
-  />);
+  const items = times
+    .sort((a, b) => a.code.localeCompare(b.code))
+    .map(t => <List.Item
+      key={t.code}
+      title={`${t.code} <-> ${t.value}`}
+      actions={
+        <ActionPanel title="Management">
+          <Action icon={Icon.Heart} title="Mark as Primary" onAction={() => console.log("primary")} />
+          <Action icon={Icon.Plus} title="Add" onAction={() => LocalStorage.setItem("Australia/Sydney", "Label")} />
+          <Action icon={Icon.Trash} title="Remove" onAction={() => console.log("remove")} />
+        </ActionPanel>
+      }
+    />);
 
   return (
     <List navigationTitle="navigationTitle">
