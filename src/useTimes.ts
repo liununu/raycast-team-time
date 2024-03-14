@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LocalStorage } from "@raycast/api";
+import { Alert, confirmAlert, LocalStorage } from "@raycast/api";
 
 const primaryCode = "PrimaryCode";
 
@@ -51,6 +51,19 @@ export const useTimes = () => {
     setRefresh(!refresh);
   };
 
+  const removeAll = async () => {
+    const options: Alert.Options = {
+      title: "Remove All",
+      message: "Would you like to remove all the times?",
+      primaryAction: {
+        title: "Yes",
+        style: Alert.ActionStyle.Destructive,
+        onAction: () => LocalStorage.clear().then(() => setRefresh(!refresh))
+      }
+    };
+    await confirmAlert(options);
+  };
+
   const markPrimary = async (code: string) => {
     await LocalStorage.setItem(primaryCode, code);
     setRefresh(!refresh);
@@ -61,6 +74,7 @@ export const useTimes = () => {
     primary,
     add,
     remove,
+    removeAll,
     markPrimary
   };
 };
