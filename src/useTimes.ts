@@ -23,6 +23,7 @@ export const useTimes = () => {
     LocalStorage.allItems()
       .then((items) => {
         const allTimes = Object.entries(items)
+          .filter(item => item[0] != PRIMARY_CODE)
           .reduce((pre, cur) => pre.concat({ code: cur[0], value: getNowTime(cur[0]), label: cur[1] }), initTimes);
         setTimes(allTimes);
       })
