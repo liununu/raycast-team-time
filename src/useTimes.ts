@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import { Alert, confirmAlert, LocalStorage } from "@raycast/api";
 
-const primaryCode = "PrimaryCode";
+const PRIMARY_CODE = "PrimaryCode";
+
+const getNowTime = (timezone: string) => new Date()
+  .toLocaleString(undefined, { timeStyle: "short", timeZone: timezone, hour12: false });
 
 export const useTimes = () => {
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const nowTime = new Date().toLocaleString(undefined, {
-    timeStyle: "short",
-    timeZone: currentTimeZone,
-    hour12: false
-  });
   const defaultTime = {
     code: currentTimeZone,
-    value: nowTime
+    label: "Current",
+    value: getNowTime(currentTimeZone)
   };
   const initTimes = [defaultTime];
 
@@ -24,12 +23,12 @@ export const useTimes = () => {
     LocalStorage.allItems()
       .then((items) => {
         const allTimes = Object.entries(items)
-          .reduce((pre, cur) => pre.concat({ code: cur[0], value: cur[1] }), initTimes);
+          .reduce((pre, cur) => pre.concat({ code: cur[0], value: getNowTime(cur[0]), label: cur[1] }), initTimes);
 
-        LocalStorage.getItem(primaryCode)
+        LocalStorage.getItem(PRIMARY_CODE)
           .then(code => {
-            const time = code == undefined ? code : allTimes.find(t => t.code == code);
-            setPrimary(time == undefined ? defaultTime : time);
+            const time = allTimes.find(t => t.code == code) ?? defaultTime;
+            setPrimary(time);
           })
           .catch(() => setPrimary(defaultTime));
 
@@ -42,7 +41,7 @@ export const useTimes = () => {
     .sort((a, b) => a.code.localeCompare(b.code));
 
   const add = async () => {
-    await LocalStorage.setItem(new Date().toUTCString(), "fake data");
+    await LocalStorage.setItem("Australia/Sydney", "澳洲 🦘");
     setRefresh(!refresh);
   };
 
@@ -65,7 +64,7 @@ export const useTimes = () => {
   };
 
   const markPrimary = async (code: string) => {
-    await LocalStorage.setItem(primaryCode, code);
+    await LocalStorage.setItem(PRIMARY_CODE, code);
     setRefresh(!refresh);
   };
 

@@ -13,8 +13,9 @@ export default () => {
     <List.Section title="Primary">
       <List.Item
         key={primary.code}
-        title={primary.code}
+        title={primary.label}
         subtitle={primary.value}
+        accessories={[{ text: primary.code }]}
         actions={
           <ActionPanel title={ACTION_PANEL_TITLE}>
             {addAction}
@@ -27,8 +28,9 @@ export default () => {
       {times.map(t =>
         <List.Item
           key={t.code}
-          title={t.code}
+          title={t.label}
           subtitle={t.value}
+          accessories={[{ text: t.code }]}
           actions={
             <ActionPanel title={ACTION_PANEL_TITLE}>
               <Action icon={Icon.Heart} title="Mark as Primary" onAction={() => markPrimary(t.code)} />
