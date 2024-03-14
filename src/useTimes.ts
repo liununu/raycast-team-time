@@ -25,18 +25,17 @@ export const useTimes = () => {
       .then((items) => {
         const allTimes = Object.entries(items)
           .reduce((pre, cur) => pre.concat({ code: cur[0], value: cur[1] }), initTimes);
+
+        LocalStorage.getItem(primaryCode)
+          .then(code => {
+            const time = code == undefined ? code : allTimes.find(t => t.code == code);
+            setPrimary(time == undefined ? defaultTime : time);
+          })
+          .catch(() => setPrimary(defaultTime));
+
         setTimes(allTimes);
       })
       .catch(() => setTimes(initTimes));
-  }, [refresh]);
-
-  useEffect(() => {
-    LocalStorage.getItem(primaryCode)
-      .then(code => {
-        const time = code == undefined ? code : times.find(t => t.code == code);
-        setPrimary(time == undefined ? defaultTime : time);
-      })
-      .catch(() => setPrimary(defaultTime));
   }, [refresh]);
 
   const data = times
