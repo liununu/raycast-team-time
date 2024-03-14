@@ -1,13 +1,15 @@
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
 import { useTimes } from "./useTimes";
+import { partition } from "./utils";
 
 const ACTION_PANEL_TITLE = "Management";
 
 export default () => {
-  const { data: times, primary, add, remove, removeAll, markPrimary } = useTimes();
+  const { data, primaryCode, add, remove, removeAll, markPrimary } = useTimes();
   const addAction = <Action icon={Icon.Plus} title="Add" onAction={() => add()} />;
   const removeAllAction = <Action icon={Icon.RotateClockwise} title="Remove All" onAction={removeAll}
                                   style={Action.Style.Destructive} />;
+  const [[primary], others] = partition(data, (t) => t.code == primaryCode);
 
   return <List>
     <List.Section title="Primary">
@@ -25,7 +27,7 @@ export default () => {
       />
     </List.Section>
     <List.Section title="Others">
-      {times.map(t =>
+      {others.map(t =>
         <List.Item
           key={t.code}
           title={t.label}

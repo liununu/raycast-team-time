@@ -17,24 +17,24 @@ export const useTimes = () => {
 
   const [refresh, setRefresh] = useState(false);
   const [times, setTimes] = useState(initTimes);
-  const [primary, setPrimary] = useState(defaultTime);
+  const [primaryCode, setPrimaryCode] = useState(currentTimeZone);
 
   useEffect(() => {
     LocalStorage.allItems()
       .then((items) => {
         const allTimes = Object.entries(items)
           .reduce((pre, cur) => pre.concat({ code: cur[0], value: getNowTime(cur[0]), label: cur[1] }), initTimes);
-
-        LocalStorage.getItem(PRIMARY_CODE)
-          .then(code => {
-            const time = allTimes.find(t => t.code == code) ?? defaultTime;
-            setPrimary(time);
-          })
-          .catch(() => setPrimary(defaultTime));
-
         setTimes(allTimes);
       })
       .catch(() => setTimes(initTimes));
+  }, [refresh]);
+
+  useEffect(() => {
+    LocalStorage.getItem(PRIMARY_CODE)
+      .then(code => {
+        setPrimaryCode(String(code ?? currentTimeZone));
+      })
+      .catch(() => setPrimaryCode(currentTimeZone));
   }, [refresh]);
 
   const data = times
@@ -70,7 +70,7 @@ export const useTimes = () => {
 
   return {
     data,
-    primary,
+    primaryCode,
     add,
     remove,
     removeAll,
