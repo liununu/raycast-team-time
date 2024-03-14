@@ -8,14 +8,16 @@ export default () => {
     <List.Section title="Primary">
       <List.Item
         key={primary.code}
-        title={`${primary.code} <-> ${primary.value}`}
+        title={primary.code}
+        subtitle={primary.value}
       />
     </List.Section>
     <List.Section title="Others">
       {times.map(t =>
         <List.Item
           key={t.code}
-          title={`${t.code} <-> ${t.value}`}
+          title={t.code}
+          subtitle={t.value}
           actions={
             <ActionPanel title="Management">
               <Action icon={Icon.Heart} title="Mark as Primary" onAction={() => markPrimary(t.code)} />
