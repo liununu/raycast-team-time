@@ -1,9 +1,10 @@
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
 import { useTimes } from "./useTimes";
 import { partition } from "./utils";
+import AddForm from "./AddForm";
 
 export default () => {
-  const { data, primaryCode, add, remove, removeAll, markPrimary } = useTimes();
+  const { data, primaryCode, remove, removeAll, markPrimary } = useTimes();
   const [primary, others] = partition(data, (t) => t.code == primaryCode);
 
   const buildTimeSection = (type: "Primary" | "Others", times: { code: string; label: string; value: string }[]) =>
@@ -16,7 +17,7 @@ export default () => {
           accessories={[{ text: t.code }]}
           actions={<ActionPanel title={"Management"}>
             <Action icon={Icon.Heart} title="Mark as Primary" onAction={() => markPrimary(t.code)} />
-            <Action icon={Icon.Plus} title="Add" onAction={() => add()} />
+            <Action.Push icon={Icon.Plus} title="Add" target={<AddForm />} />
             <Action icon={Icon.Trash} title="Remove" onAction={() => remove(t.code)} />
             <Action icon={Icon.RotateClockwise} title="Remove All" onAction={removeAll}
                     style={Action.Style.Destructive} />
