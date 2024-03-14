@@ -1,8 +1,13 @@
 import { Action, ActionPanel, Icon, List } from "@raycast/api";
 import { useTimes } from "./useTimes";
 
+const ACTION_PANEL_TITLE = "Management";
+
 export default () => {
   const { data: times, primary, add, remove, removeAll, markPrimary } = useTimes();
+  const addAction = <Action icon={Icon.Plus} title="Add" onAction={() => add()} />;
+  const removeAllAction = <Action icon={Icon.RotateClockwise} title="Remove All" onAction={removeAll}
+                                  style={Action.Style.Destructive} />;
 
   return <List>
     <List.Section title="Primary">
@@ -10,6 +15,12 @@ export default () => {
         key={primary.code}
         title={primary.code}
         subtitle={primary.value}
+        actions={
+          <ActionPanel title={ACTION_PANEL_TITLE}>
+            {addAction}
+            {removeAllAction}
+          </ActionPanel>
+        }
       />
     </List.Section>
     <List.Section title="Others">
@@ -19,12 +30,11 @@ export default () => {
           title={t.code}
           subtitle={t.value}
           actions={
-            <ActionPanel title="Management">
+            <ActionPanel title={ACTION_PANEL_TITLE}>
               <Action icon={Icon.Heart} title="Mark as Primary" onAction={() => markPrimary(t.code)} />
-              <Action icon={Icon.Plus} title="Add" onAction={() => add()} />
+              {addAction}
               <Action icon={Icon.Trash} title="Remove" onAction={() => remove(t.code)} />
-              <Action icon={Icon.RotateClockwise} title="Remove All" onAction={removeAll}
-                      style={Action.Style.Destructive} />
+              {removeAllAction}
             </ActionPanel>
           }
         />)}
