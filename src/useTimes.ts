@@ -12,17 +12,31 @@ export const useTimes = () => {
     code: currentTimeZone,
     value: nowTime
   };
+  const initTimes = [defaultTime];
 
-  const [times, setTimes] = useState<Time[]>([defaultTime]);
+  const [refresh, setRefresh] = useState(false);
+  const [times, setTimes] = useState(initTimes);
 
   useEffect(() => {
     LocalStorage.allItems()
       .then((items) => {
-        const reduce = Object.entries(items).reduce((pre, cur) => pre.concat({ code: cur[0], value: cur[1] }), times);
-        setTimes(reduce);
+        const allTimes = Object.entries(items)
+          .reduce((pre, cur) => pre.concat({ code: cur[0], value: cur[1] }), initTimes);
+        setTimes(allTimes);
       })
-      .catch(() => setTimes([defaultTime]));
-  }, []);
+      .catch(() => setTimes(initTimes));
+  }, [refresh]);
 
-  return times.sort((a, b) => a.code.localeCompare(b.code));
+  const data = times
+    .sort((a, b) => a.code.localeCompare(b.code));
+
+  const remove = async (itemKey: string) => {
+    await LocalStorage.removeItem(itemKey);
+    setRefresh(!refresh);
+  };
+
+  return {
+    data,
+    remove
+  };
 };
