@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { LocalStorage } from "@raycast/api";
 
+const primaryCode = "PrimaryCode";
+
 export const useTimes = () => {
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const nowTime = new Date().toLocaleString(undefined, {
@@ -16,6 +18,7 @@ export const useTimes = () => {
 
   const [refresh, setRefresh] = useState(false);
   const [times, setTimes] = useState(initTimes);
+  const [primary, setPrimary] = useState(defaultTime);
 
   useEffect(() => {
     LocalStorage.allItems()
@@ -25,6 +28,15 @@ export const useTimes = () => {
         setTimes(allTimes);
       })
       .catch(() => setTimes(initTimes));
+  }, [refresh]);
+
+  useEffect(() => {
+    LocalStorage.getItem(primaryCode)
+      .then(code => {
+        const time = code == undefined ? code : times.find(t => t.code == code);
+        setPrimary(time == undefined ? defaultTime : time);
+      })
+      .catch(() => setPrimary(defaultTime));
   }, [refresh]);
 
   const data = times
@@ -40,9 +52,16 @@ export const useTimes = () => {
     setRefresh(!refresh);
   };
 
+  const markPrimary = async (code: string) => {
+    await LocalStorage.setItem(primaryCode, code);
+    setRefresh(!refresh);
+  };
+
   return {
     data,
+    primary,
     add,
-    remove
+    remove,
+    markPrimary
   };
 };
