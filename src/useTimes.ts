@@ -30,6 +30,11 @@ export const useTimes = () => {
   const data = times
     .sort((a, b) => a.code.localeCompare(b.code));
 
+  const add = async () => {
+    await LocalStorage.setItem(new Date().toUTCString(), "fake data");
+    setRefresh(!refresh);
+  };
+
   const remove = async (itemKey: string) => {
     await LocalStorage.removeItem(itemKey);
     setRefresh(!refresh);
@@ -37,6 +42,7 @@ export const useTimes = () => {
 
   return {
     data,
+    add,
     remove
   };
 };
