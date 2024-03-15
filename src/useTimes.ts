@@ -41,8 +41,8 @@ export const useTimes = () => {
   const data = times
     .sort((a, b) => a.code.localeCompare(b.code));
 
-  const add = async () => {
-    await LocalStorage.setItem("Australia/Sydney", "澳洲 🦘");
+  const add = async (code: string, label: string) => {
+    await LocalStorage.setItem(code, label);
     setRefresh(!refresh);
   };
 
