@@ -1,7 +1,7 @@
 import { Action, ActionPanel, Icon, List, useNavigation } from "@raycast/api";
-import { useTimes } from "./useTimes";
-import { partition } from "./utils";
-import AddForm from "./AddForm";
+import { useTimes } from "./hooks/useTimes";
+import { partition } from "./utils/utils";
+import AddForm from "./components/AddForm";
 
 export default () => {
   const { push, pop } = useNavigation();
