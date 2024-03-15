@@ -29,7 +29,16 @@ export default () => {
     </List.Section>;
 
   return <List filtering={false} onSearchTextChange={setSearchText} searchBarPlaceholder="Search Times...">
-    {buildTimeSection("Primary", primary)}
-    {buildTimeSection("Others", others)}
+    {data.length == 0 ?
+      <List.EmptyView icon={Icon.Emoji} title="Press ↵ to Start" actions={
+        <ActionPanel>
+          <Action icon={Icon.Plus} title="Start"
+                  onAction={() => push(<AddForm onSubmit={({ code, label }) => add(code, label).then(pop)} />)} />
+        </ActionPanel>} /> :
+      <>
+        {buildTimeSection("Primary", primary)}
+        {buildTimeSection("Others", others)}
+      </>
+    }
   </List>;
 };
