@@ -15,5 +15,3 @@ export const caseInsensitiveContains = (string: string, searchString: string) =>
 export const PRIMARY_CODE = "PrimaryCode";
 
 export const getCurrentTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-export const noop = () => {};
