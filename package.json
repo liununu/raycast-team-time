@@ -11,6 +11,13 @@
   "license": "MIT",
   "commands": [
     {
+      "name": "index",
+      "title": "Team Time",
+      "description": "Shows the Primary Team's Timezones",
+      "mode": "no-view",
+      "interval": "1m"
+    },
+    {
       "name": "manage",
       "title": "Manage Team Time",
       "description": "Manages the Team's Timezones",

@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { Alert, confirmAlert, LocalStorage } from "@raycast/api";
-import { caseInsensitiveContains, getNowTime } from "../utils/utils";
-
-const PRIMARY_CODE = "PrimaryCode";
+import { caseInsensitiveContains, getCurrentTimeZone, getNowTime, PRIMARY_CODE } from "../utils/utils";
 
 export const useTimes = () => {
-  const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const currentTimeZone = getCurrentTimeZone();
   const defaultTime = {
     code: currentTimeZone,
     label: "Current",

@@ -11,3 +11,7 @@ export const getNowTime = (timeZone: string) => new Date()
   .toLocaleString(undefined, { timeStyle: "short", timeZone, hour12: false });
 
 export const caseInsensitiveContains = (string: string, searchString: string) => string.toLowerCase().includes(searchString.toLowerCase());
+
+export const PRIMARY_CODE = "PrimaryCode";
+
+export const getCurrentTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
