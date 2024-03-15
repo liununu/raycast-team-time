@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Form } from "@raycast/api";
+import { Action, ActionPanel, Form, useNavigation } from "@raycast/api";
 import { useState } from "react";
 import { useTimes } from "./useTimes";
 
@@ -6,6 +6,7 @@ export default () => {
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const [code, setCode] = useState<string>(currentTimeZone);
   const [label, setLabel] = useState<string>("");
+  const { pop } = useNavigation();
   const { add } = useTimes();
 
   return (
@@ -13,7 +14,7 @@ export default () => {
       navigationTitle={"Add Team Time"}
       actions={
         <ActionPanel>
-          <Action.SubmitForm title="Submit" onSubmit={({ code, label }) => add(code, label)} />
+          <Action.SubmitForm title="Submit" onSubmit={({ code, label }) => add(code, label).then(pop)} />
         </ActionPanel>
       }
     >
