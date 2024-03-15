@@ -1,62 +1,27 @@
-import { Form } from "@raycast/api";
+import { Action, ActionPanel, Form } from "@raycast/api";
 import { useState } from "react";
 
 export default () => {
-  const [nameError, setNameError] = useState<string | undefined>();
-  const [passwordError, setPasswordError] = useState<string | undefined>();
-
-  function dropNameErrorIfNeeded() {
-    if (nameError && nameError.length > 0) {
-      setNameError(undefined);
-    }
-  }
-
-  function dropPasswordErrorIfNeeded() {
-    if (passwordError && passwordError.length > 0) {
-      setPasswordError(undefined);
-    }
-  }
+  const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const [code, setCode] = useState<string>(currentTimeZone);
+  const [label, setLabel] = useState<string | undefined>(undefined);
 
   return (
-    <Form>
-      <Form.TextField
-        id="nameField"
-        title="Full Name"
-        placeholder="Enter your name"
-        error={nameError}
-        onChange={dropNameErrorIfNeeded}
-        onBlur={(event) => {
-          if (event.target.value?.length == 0) {
-            setNameError("The field should't be empty!");
-          } else {
-            dropNameErrorIfNeeded();
-          }
-        }}
+    <Form
+      navigationTitle={"Add Team Time"}
+      actions={
+        <ActionPanel>
+          <Action.SubmitForm title="Submit" onSubmit={(values) => console.log(values)} />
+        </ActionPanel>
+      }
+    >
+      <Form.Dropdown id="code-dropdown" title="Time Zone" value={code} onChange={setCode}>
+        {Intl.supportedValuesOf("timeZone")
+          .map(t => <Form.Dropdown.Item key={t} value={t} title={t} />)}
+      </Form.Dropdown>
+      <Form.TextField id="label-field" title="Label" placeholder="Give the label for this time zone" value={label}
+                      onChange={setLabel}
       />
-      <Form.PasswordField
-        id="password"
-        title="New Password"
-        error={passwordError}
-        onChange={dropPasswordErrorIfNeeded}
-        onBlur={(event) => {
-          const value = event.target.value;
-          if (value && value.length > 0) {
-            if (!validatePassword(value)) {
-              setPasswordError("Password should be at least 8 characters!");
-            } else {
-              dropPasswordErrorIfNeeded();
-            }
-          } else {
-            setPasswordError("The field should't be empty!");
-          }
-        }}
-      />
-      <Form.TextArea id="bioTextArea" title="Add Bio" placeholder="Describe who you are" />
-      <Form.DatePicker id="birthDate" title="Date of Birth" />
     </Form>
   );
-}
-
-function validatePassword(value: string): boolean {
-  return value.length >= 8;
 }

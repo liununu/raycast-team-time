@@ -3,8 +3,8 @@ import { Alert, confirmAlert, LocalStorage } from "@raycast/api";
 
 const PRIMARY_CODE = "PrimaryCode";
 
-const getNowTime = (timezone: string) => new Date()
-  .toLocaleString(undefined, { timeStyle: "short", timeZone: timezone, hour12: false });
+const getNowTime = (timeZone: string) => new Date()
+  .toLocaleString(undefined, { timeStyle: "short", timeZone, hour12: false });
 
 export const useTimes = () => {
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
