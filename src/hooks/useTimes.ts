@@ -37,6 +37,9 @@ export const useTimes = () => {
 
   const remove = async (code: string) => {
     await LocalStorage.removeItem(code);
+    if (primaryCode == code) {
+      await LocalStorage.removeItem(PRIMARY_CODE)
+    }
     setRefresh(!refresh);
   };
 
