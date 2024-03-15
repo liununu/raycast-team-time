@@ -5,7 +5,7 @@ import AddForm from "./components/AddForm";
 
 export default () => {
   const { push, pop } = useNavigation();
-  const { data, primaryCode, add, remove, removeAll, markPrimary } = useTimes();
+  const { data, primaryCode, add, remove, removeAll, markPrimary, setSearchText } = useTimes();
   const [primary, others] = partition(data, (t) => t.code == primaryCode);
 
   const buildTimeSection = (type: "Primary" | "Others", times: { code: string; label: string; value: string }[]) =>
@@ -27,7 +27,7 @@ export default () => {
         />)}
     </List.Section>;
 
-  return <List>
+  return <List filtering={false} onSearchTextChange={setSearchText} searchBarPlaceholder="Search Times...">
     {buildTimeSection("Primary", primary)}
     {buildTimeSection("Others", others)}
   </List>;

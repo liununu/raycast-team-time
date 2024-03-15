@@ -6,3 +6,8 @@ export const partition = <T>(array: Array<T>, predicate: (val: T) => boolean): [
   });
   return partitioned;
 };
+
+export const getNowTime = (timeZone: string) => new Date()
+  .toLocaleString(undefined, { timeStyle: "short", timeZone, hour12: false });
+
+export const caseInsensitiveContains = (string: string, searchString: string) => string.toLowerCase().includes(searchString.toLowerCase());
