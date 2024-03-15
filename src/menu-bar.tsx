@@ -1,37 +1,24 @@
 import { MenuBarExtra } from "@raycast/api";
-
-interface IMenuBarProps {
-  times: {
-    emoji: string
-    code: string
-    label: string
-    value: string
-  }[];
-  action?: {
-    name: string
-    do: () => void
-  };
-}
+import { useTimes } from "./hooks/useTimes";
+import { noop, partition } from "./utils/utils";
 
 export default () => {
-  const nowTime = new Date().toLocaleString(undefined, { timeStyle: "short" });
-  const time = {
-    emoji: "🇨🇳",
-    code: "CN",
-    label: "China",
-    value: nowTime
-  };
-  const setting = {
-    name: "Setting", do: () => {
-      console.log("should open setting page");
-    }
-  };
-  const items = [time].map(t => <MenuBarExtra.Item key={t.code} title={`${t.emoji} ${t.label}: ${t.value}`} />);
+  const { data, primaryCode } = useTimes();
+  const [primary, others] = partition(data, (t) => t.code == primaryCode);
+
+  const format = ({ code, value }: { code: string; label: string; value: string }) => `${value} ${code}`;
+
+  const buildTimeSection = (type: "Primary" | "Others", times: { code: string; label: string; value: string }[]) =>
+    <MenuBarExtra.Section title={type}>
+      {times.map((t, index) => (
+        <MenuBarExtra.Item key={index} title={format(t)} onAction={noop} />
+      ))}
+    </MenuBarExtra.Section>;
 
   return (
-    <MenuBarExtra icon="../assets/icon.png" tooltip="Team Time">
-      {items}
-      {setting ? <MenuBarExtra.Item title={setting.name} onAction={setting.do} /> : null}
+    <MenuBarExtra icon="../assets/icon.png" tooltip="Team Time" title={format(primary[0])}>
+      {buildTimeSection("Primary", primary)}
+      {buildTimeSection("Others", others)}
     </MenuBarExtra>
   );
 }
