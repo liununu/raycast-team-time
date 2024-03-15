@@ -4,21 +4,22 @@ import { partition } from "./utils";
 import AddForm from "./AddForm";
 
 export default () => {
-  const { push } = useNavigation();
-  const { data, primaryCode, remove, removeAll, markPrimary } = useTimes();
+  const { push, pop } = useNavigation();
+  const { data, primaryCode, add, remove, removeAll, markPrimary } = useTimes();
   const [primary, others] = partition(data, (t) => t.code == primaryCode);
 
   const buildTimeSection = (type: "Primary" | "Others", times: { code: string; label: string; value: string }[]) =>
     <List.Section title={type}>
-      {times.map(t =>
+      {times.map((t, index) =>
         <List.Item
-          key={t.code}
+          key={index}
           title={t.label}
           subtitle={t.value}
           accessories={[{ text: t.code }]}
           actions={<ActionPanel title={"Management"}>
             <Action icon={Icon.Heart} title="Mark as Primary" onAction={() => markPrimary(t.code)} />
-            <Action icon={Icon.Plus} title="Add" onAction={() => push(<AddForm />)} />
+            <Action icon={Icon.Plus} title="Add"
+                    onAction={() => push(<AddForm onSubmit={({ code, label }) => add(code, label).then(pop)} />)} />
             <Action icon={Icon.Trash} title="Remove" onAction={() => remove(t.code)} />
             <Action icon={Icon.RotateClockwise} title="Remove All" onAction={removeAll}
                     style={Action.Style.Destructive} />
