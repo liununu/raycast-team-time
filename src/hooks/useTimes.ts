@@ -1,19 +1,12 @@
 import { useEffect, useState } from "react";
 import { Alert, confirmAlert, LocalStorage } from "@raycast/api";
-import { caseInsensitiveContains, getCurrentTimeZone, getNowTime, PRIMARY_CODE } from "../utils/utils";
+import { caseInsensitiveContains, getNowTime, PRIMARY_CODE } from "../utils/utils";
+import { Time } from "../types/types";
 
 export const useTimes = () => {
-  const currentTimeZone = getCurrentTimeZone();
-  const defaultTime = {
-    code: currentTimeZone,
-    label: "Current",
-    value: getNowTime(currentTimeZone)
-  };
-  const initTimes = [defaultTime];
-
   const [refresh, setRefresh] = useState(false);
-  const [times, setTimes] = useState(initTimes);
-  const [primaryCode, setPrimaryCode] = useState(currentTimeZone);
+  const [times, setTimes] = useState<Time[]>([]);
+  const [primaryCode, setPrimaryCode] = useState<string>();
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
@@ -21,19 +14,17 @@ export const useTimes = () => {
       .then((items) => {
         const times = Object.entries(items)
           .filter(item => item[0] != PRIMARY_CODE)
-          .reduce((pre, cur) => pre.concat({ code: cur[0], value: getNowTime(cur[0]), label: cur[1] }), initTimes)
+          .reduce((pre, cur) => pre.concat({ code: cur[0], value: getNowTime(cur[0]), label: cur[1] }), <Time[]>[])
           .filter(t => caseInsensitiveContains(t.code, searchText) || caseInsensitiveContains(t.label, searchText));
         setTimes(times);
       })
-      .catch(() => setTimes(initTimes));
+      .catch(() => setTimes([]));
   }, [refresh, searchText]);
 
   useEffect(() => {
     LocalStorage.getItem(PRIMARY_CODE)
-      .then(code => {
-        setPrimaryCode(String(code ?? currentTimeZone));
-      })
-      .catch(() => setPrimaryCode(currentTimeZone));
+      .then(code => setPrimaryCode(code as (string | undefined)))
+      .catch(() => setPrimaryCode(undefined));
   }, [refresh]);
 
   const data = times

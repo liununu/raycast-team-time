@@ -2,13 +2,14 @@ import { Action, ActionPanel, Icon, List, useNavigation } from "@raycast/api";
 import { useTimes } from "./hooks/useTimes";
 import { partition } from "./utils/utils";
 import AddForm from "./components/AddForm";
+import { Time } from "./types/types";
 
 export default () => {
   const { push, pop } = useNavigation();
   const { data, primaryCode, add, remove, removeAll, markPrimary, setSearchText } = useTimes();
   const [primary, others] = partition(data, (t) => t.code == primaryCode);
 
-  const buildTimeSection = (type: "Primary" | "Others", times: { code: string; label: string; value: string }[]) =>
+  const buildTimeSection = (type: "Primary" | "Others", times: Time[]) =>
     <List.Section title={type}>
       {times.map((t, index) =>
         <List.Item
