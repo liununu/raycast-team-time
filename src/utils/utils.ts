@@ -15,3 +15,5 @@ export const caseInsensitiveContains = (string: string, searchString: string) =>
 export const PRIMARY_CODE = "PrimaryCode";
 
 export const getCurrentTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+export const getLocationFromTimeZone = (timeZone: string, defaultValue: string = "") => timeZone.split("/").at(-1) ?? defaultValue;

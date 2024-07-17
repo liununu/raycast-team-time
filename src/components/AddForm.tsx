@@ -1,11 +1,15 @@
 import { Action, ActionPanel, Form } from "@raycast/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCurrentTimeZone, getLocationFromTimeZone } from "../utils/utils";
 
 export default (props: { onSubmit: (value: { code: string, label: string }) => void }) => {
-  const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const defaultLabel = currentTimeZone.split("/").at(-1) ?? "";
+  const currentTimeZone = getCurrentTimeZone();
   const [code, setCode] = useState<string>(currentTimeZone);
-  const [label, setLabel] = useState<string>(defaultLabel);
+  const [label, setLabel] = useState<string>(getLocationFromTimeZone(code));
+
+  useEffect(() => {
+    setLabel(getLocationFromTimeZone(code))
+  }, [code]);
 
   return (
     <Form
