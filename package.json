@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "team-time",
   "title": "Team Time",
-  "description": "Quick overview of the team's timezones",
+  "description": "Quick overview of the team's time zones",
   "icon": "icon.png",
   "author": "liununu",
   "categories": [
@@ -13,14 +13,14 @@
     {
       "name": "index",
       "title": "Team Time",
-      "description": "Shows the Primary Team's Timezones",
+      "description": "Shows the Primary Team's Time Zones",
       "mode": "no-view",
       "interval": "10s"
     },
     {
       "name": "manage",
       "title": "Manage Team Time",
-      "description": "Manages the Team's Timezones",
+      "description": "Manages the Team's Time Zones",
       "mode": "view",
       "interval": "1m"
     }
