@@ -3,8 +3,9 @@ import { useState } from "react";
 
 export default (props: { onSubmit: (value: { code: string, label: string }) => void }) => {
   const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const defaultLabel = currentTimeZone.split("/").at(-1) ?? "";
   const [code, setCode] = useState<string>(currentTimeZone);
-  const [label, setLabel] = useState<string>("");
+  const [label, setLabel] = useState<string>(defaultLabel);
 
   return (
     <Form
