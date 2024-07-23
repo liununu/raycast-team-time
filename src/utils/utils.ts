@@ -16,4 +16,7 @@ export const PRIMARY_CODE = "PrimaryCode";
 
 export const getCurrentTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-export const getLocationFromTimeZone = (timeZone: string, defaultValue: string = "") => timeZone.split("/").at(-1) ?? defaultValue;
+export const getLocationFromTimeZone = (timeZone: string, defaultValue: string = "") => timeZone
+  .split("/")
+  .at(-1)
+  ?.replace("_", " ") ?? defaultValue;
